@@ -1,5 +1,7 @@
 import './App.css';
 import React, {useEffect, useState } from "react";
+import Weather from './components/weather';
+
 
 function App() {
   const [lat, setLat] = useState([]);
@@ -13,7 +15,7 @@ function App() {
         setLong(position.coords.longitude);
       });
 
-      await fetch(`${process.env.REACT_APP_API_URL}/weather/?lat=${lat}&lon=${long}$units=metric&APPID=${process.env.REACT_APP_API_KEY}`)
+      await fetch(`${process.env.REACT_APP_API_URL}/weather/?lat=${lat}&lon=${long}&units=metric&APPID=${process.env.REACT_APP_API_KEY}`)
       .then(res => res.json())
       .then(result => {
         setData(result)
@@ -21,14 +23,19 @@ function App() {
       });
     }
     fetchData();
+    console.log(lat);
+    console.log(long);
   }, [lat,long])
-
-
-
 
 
   return (
     <div className="App">
+      {(typeof data.main != 'undefined') ? (
+        <Weather weatherData={data}/>
+      ): (
+        <div></div>
+      )}
+
     </div>
   );
 }
